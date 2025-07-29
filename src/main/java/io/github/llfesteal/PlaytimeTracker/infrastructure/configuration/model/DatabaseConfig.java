@@ -1,4 +1,4 @@
-package io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.database.model;
+package io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model;
 
 import fr.lifesteal.pluginframework.core.config.ConfigModel;
 import org.bukkit.configuration.serialization.SerializableAs;

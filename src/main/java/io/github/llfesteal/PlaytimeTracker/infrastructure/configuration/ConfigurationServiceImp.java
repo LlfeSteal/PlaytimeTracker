@@ -1,9 +1,9 @@
-package io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.database;
+package io.github.llfesteal.PlaytimeTracker.infrastructure.configuration;
 
 import fr.lifesteal.pluginframework.api.config.ConfigRepository;
 import fr.lifesteal.pluginframework.core.config.ConfigParam;
 import fr.lifesteal.pluginframework.core.config.ConfigServiceBase;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.database.model.DatabaseConfig;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.DatabaseConfig;
 
 import java.util.logging.Logger;
 

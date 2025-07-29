@@ -1,7 +1,7 @@
 package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository;
 
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.database.ConfigurationService;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactory;
 
 import java.sql.PreparedStatement;

@@ -1,7 +1,7 @@
 package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database;
 
-import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.database.ConfigurationService;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.database.model.DatabaseConfig;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.DatabaseConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
