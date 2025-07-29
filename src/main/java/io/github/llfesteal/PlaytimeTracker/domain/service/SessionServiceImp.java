@@ -16,10 +16,9 @@ public class SessionServiceImp implements SessionService {
     }
 
     @Override
-    public Session createNewSession(UUID playerId) {
+    public void createNewSession(UUID playerId) {
         var newSession = new Session(playerId, LocalDateTime.now(), LocalDateTime.now());
         activeSessionStorage.add(newSession);
-        return newSession;
     }
 
     @Override
