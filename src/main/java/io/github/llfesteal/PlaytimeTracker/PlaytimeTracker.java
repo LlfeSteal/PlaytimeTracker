@@ -9,6 +9,8 @@ import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.SessionServiceImp;
 import io.github.llfesteal.PlaytimeTracker.Application.listener.PlayerListener;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationServiceImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangService;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.DatabaseConfig;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.ActiveSessionStorageImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManagerImp;
@@ -20,6 +22,7 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PlaytimeTracker extends PluginBase {
 
@@ -27,18 +30,22 @@ public class PlaytimeTracker extends PluginBase {
         ConfigurationSerialization.registerClass(DatabaseConfig.class, "DatabaseConfig");
     }
 
+    private Logger logger = getLogger();
     private SessionService sessionService;
     private PlayerService playerService;
+    private LangServiceImp langService;
     private ConfigurationServiceImp configurationService;
 
     @Override
     public void init() {
         var sessionManager = new SessionManagerImp();
 
+        var langConfigurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "lang.yml");
+        this.langService = new LangServiceImp(this.logger, langConfigurationRepository);
         var configurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "config.yml");
-        this.configurationService = new ConfigurationServiceImp(getLogger(), configurationRepository);
-        var connectionFactory = new ConnectionFactoryImp(getLogger(), this.configurationService);
-        var sessionRepository = new SessionRepositoryImp(getLogger(), connectionFactory, this.configurationService);
+        this.configurationService = new ConfigurationServiceImp(this.logger, configurationRepository);
+        var connectionFactory = new ConnectionFactoryImp(this.logger, this.configurationService);
+        var sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
         sessionRepository.init();
         var sessionStorage = new ActiveSessionStorageImp(sessionManager, sessionRepository);
 
@@ -57,6 +64,8 @@ public class PlaytimeTracker extends PluginBase {
                             .setPermission("playtime.playtime")
                             .setExecutorType(PlaytimeCommand.class)
                             .addExtraArgument(sessionService)
+                            .addExtraArgument(langService)
+                            .addExtraArgument(logger)
                             .build())
                     .build());
         }};
@@ -66,6 +75,7 @@ public class PlaytimeTracker extends PluginBase {
     protected List<ConfigService> registerConfigurationsServices() {
         return new ArrayList<>(){{
             add(configurationService);
+            add(langService);
         }};
     }
 
