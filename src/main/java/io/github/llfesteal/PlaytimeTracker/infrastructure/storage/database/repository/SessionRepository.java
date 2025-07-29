@@ -5,4 +5,6 @@ import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 public interface SessionRepository {
     void init();
     void add(Session session);
+
+    void updateSessionEndDate(Session session);
 }

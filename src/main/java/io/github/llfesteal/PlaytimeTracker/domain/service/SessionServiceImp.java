@@ -26,4 +26,9 @@ public class SessionServiceImp implements SessionService {
     public Session getSessionByPlayerId(UUID playerId) {
         return this.activeSessionStorage.findByPlayerId(playerId);
     }
+
+    @Override
+    public void endSession(UUID playerId) {
+        this.activeSessionStorage.endSession(playerId);
+    }
 }

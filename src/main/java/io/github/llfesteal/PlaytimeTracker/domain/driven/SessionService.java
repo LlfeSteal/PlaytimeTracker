@@ -9,4 +9,6 @@ public interface SessionService {
     Session createNewSession(UUID playerId);
 
     Session getSessionByPlayerId(UUID playerId);
+
+    void endSession(UUID playerId);
 }

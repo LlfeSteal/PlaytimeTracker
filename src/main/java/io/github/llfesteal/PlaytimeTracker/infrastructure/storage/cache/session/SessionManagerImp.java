@@ -12,12 +12,16 @@ public class SessionManagerImp implements SessionManager {
 
     @Override
     public void add(Session session) {
-        // TODO : playerId or sessionId ?
         playerSession.put(session.getPlayerId(), session);
     }
 
     @Override
     public Session getByPlayerId(UUID playerId) {
         return this.playerSession.get(playerId);
+    }
+
+    @Override
+    public Session remove(UUID playerId) {
+        return this.playerSession.remove(playerId);
     }
 }

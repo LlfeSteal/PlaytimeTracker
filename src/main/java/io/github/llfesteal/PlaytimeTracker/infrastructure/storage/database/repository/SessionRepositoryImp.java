@@ -6,6 +6,7 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.Conne
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.logging.Logger;
 
 public class SessionRepositoryImp implements SessionRepository {
@@ -31,12 +32,26 @@ public class SessionRepositoryImp implements SessionRepository {
         try(var connection = this.connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + this.getTableFullName() + "`(`player_uuid`, `start_date`, `end_date`) VALUES (?,?,?)");
             statement.setString(1, session.getPlayerId().toString());
-            statement.setString(2, session.getSessionStart().toString());
-            statement.setString(3, session.getSessionEnd().toString());
+            statement.setTimestamp(2, Timestamp.valueOf(session.getSessionStart()));
+            statement.setTimestamp(3, Timestamp.valueOf(session.getSessionEnd()));
             statement.execute();
             statement.close();
         } catch (SQLException e) {
             this.logger.severe("Error while creating entry for session of player " + session.getPlayerId() + " : " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateSessionEndDate(Session session) {
+        try(var connection = this.connectionFactory.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE `" + this.getTableFullName() + "` SET `end_date`= ? WHERE player_uuid = ? AND start_date = ?;");
+            statement.setTimestamp(1, Timestamp.valueOf(session.getSessionEnd()));
+            statement.setString(2, session.getPlayerId().toString());
+            statement.setTimestamp(3, Timestamp.valueOf(session.getSessionStart()));
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            this.logger.severe("Error while updating end_date entry for session of player " + session.getPlayerId() + " : " + e.getMessage());
         }
     }
 

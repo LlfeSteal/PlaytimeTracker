@@ -16,4 +16,9 @@ public class PlayerServiceImp implements PlayerService {
     public void onPlayerJoin(Player player) {
         this.sessionService.createNewSession(player.playerId());
     }
+
+    @Override
+    public void onPlayerQuit(Player player) {
+        this.sessionService.endSession(player.playerId());
+    }
 }

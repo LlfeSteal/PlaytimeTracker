@@ -8,4 +8,6 @@ public interface SessionManager {
     void add(Session session);
 
     Session getByPlayerId(UUID playerId);
+
+    Session remove(UUID playerId);
 }

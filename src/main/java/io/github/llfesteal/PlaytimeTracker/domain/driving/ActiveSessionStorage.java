@@ -8,4 +8,6 @@ public interface ActiveSessionStorage {
     void add(Session session);
 
     Session findByPlayerId(UUID playerId);
+
+    void endSession(UUID playerId);
 }
