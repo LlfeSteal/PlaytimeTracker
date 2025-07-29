@@ -2,6 +2,7 @@ package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session
 
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface SessionManager {
@@ -10,4 +11,6 @@ public interface SessionManager {
     Session getByPlayerId(UUID playerId);
 
     Session remove(UUID playerId);
+
+    List<Session> getAll();
 }

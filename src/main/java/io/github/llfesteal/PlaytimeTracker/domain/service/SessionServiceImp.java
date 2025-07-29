@@ -28,6 +28,16 @@ public class SessionServiceImp implements SessionService {
 
     @Override
     public void endSession(UUID playerId) {
+        var session = this.getSessionByPlayerId(playerId);
+        session.setSessionEnd(LocalDateTime.now());
         this.sessionStorage.endSession(playerId);
+    }
+
+    @Override
+    public void forceSaveSessions() {
+        for (var session :  this.sessionStorage.getAllActiveSessions()) {
+            session.setSessionEnd(LocalDateTime.now());
+            this.sessionStorage.updateSessionEndDate(session);
+        }
     }
 }

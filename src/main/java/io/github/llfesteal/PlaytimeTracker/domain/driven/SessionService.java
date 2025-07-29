@@ -10,4 +10,6 @@ public interface SessionService {
     Session getSessionByPlayerId(UUID playerId);
 
     void endSession(UUID playerId);
+
+    void forceSaveSessions();
 }

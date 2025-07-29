@@ -12,6 +12,9 @@ public class ConfigurationServiceImp extends ConfigServiceBase implements Config
     @ConfigParam(paramKey = "mysql")
     private DatabaseConfig databaseConfig = new DatabaseConfig("localhost", 3306, "test", "user", "", "PlaytimeTracker_");
 
+    @ConfigParam(paramKey = "autosave-delay")
+    private long autosaveDelay = 5000L;
+
     public ConfigurationServiceImp(Logger logger, ConfigRepository configRepository) {
         super(logger, configRepository);
     }
@@ -19,5 +22,10 @@ public class ConfigurationServiceImp extends ConfigServiceBase implements Config
     @Override
     public DatabaseConfig getDatabaseConfig() {
         return databaseConfig;
+    }
+
+    @Override
+    public long getAutosaveDelay() {
+        return autosaveDelay;
     }
 }

@@ -12,5 +12,9 @@ public interface SessionStorage {
 
     void endSession(UUID playerId);
 
+    void updateSessionEndDate(Session session);
+
     List<Session> getAllPlayerSessions(UUID playerId);
+
+    List<Session> getAllActiveSessions();
 }

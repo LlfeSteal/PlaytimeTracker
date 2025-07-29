@@ -2,6 +2,8 @@ package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session
 
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,5 +25,10 @@ public class SessionManagerImp implements SessionManager {
     @Override
     public Session remove(UUID playerId) {
         return this.playerSession.remove(playerId);
+    }
+
+    @Override
+    public List<Session> getAll() {
+        return new ArrayList<>(this.playerSession.values());
     }
 }

@@ -4,4 +4,6 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.Da
 
 public interface ConfigurationService {
     DatabaseConfig getDatabaseConfig();
+
+    long getAutosaveDelay();
 }

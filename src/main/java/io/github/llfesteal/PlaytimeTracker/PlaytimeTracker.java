@@ -3,6 +3,7 @@ package io.github.llfesteal.PlaytimeTracker;
 import fr.lifesteal.pluginframework.api.config.ConfigService;
 import fr.lifesteal.pluginframework.core.plugin.PluginBase;
 import io.github.llfesteal.PlaytimeTracker.Application.command.PlaytimeCommand;
+import io.github.llfesteal.PlaytimeTracker.Application.task.BackupSessionsTask;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
 import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerDataServiceImp;
@@ -12,6 +13,8 @@ import io.github.llfesteal.PlaytimeTracker.Application.listener.PlayerListener;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.DatabaseConfig;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.BukkitSchedulerWrapper;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.SchedulerService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.SessionStorageImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.PlayerDataStorageImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerDataManagerImp;
@@ -21,6 +24,7 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repos
 import org.bukkit.command.Command;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,9 @@ public class PlaytimeTracker extends PluginBase {
     static {
         ConfigurationSerialization.registerClass(DatabaseConfig.class, "DatabaseConfig");
     }
+
+    private final SchedulerService schedulerService = new BukkitSchedulerWrapper(this);
+    private List<BukkitTask> tasks = new ArrayList<>();
 
     private Logger logger = getLogger();
     private SessionService sessionService;
@@ -60,6 +67,15 @@ public class PlaytimeTracker extends PluginBase {
         this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerDataStorage);
 
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
+        initSchedulers();
+    }
+
+    private void initSchedulers() {
+        for (BukkitTask task : this.tasks) {
+            task.cancel();
+        }
+
+        tasks.add(this.schedulerService.runTaskTimerAsynchronously(new BackupSessionsTask(this.sessionService), this.configurationService.getAutosaveDelay(), this.configurationService.getAutosaveDelay()));
     }
 
     @Override
