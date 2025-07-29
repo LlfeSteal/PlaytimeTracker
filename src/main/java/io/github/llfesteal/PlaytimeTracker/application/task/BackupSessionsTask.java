@@ -1,4 +1,4 @@
-package io.github.llfesteal.PlaytimeTracker.Application.task;
+package io.github.llfesteal.PlaytimeTracker.application.task;
 
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
 

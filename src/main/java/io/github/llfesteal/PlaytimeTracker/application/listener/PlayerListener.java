@@ -1,4 +1,4 @@
-package io.github.llfesteal.PlaytimeTracker.Application.listener;
+package io.github.llfesteal.PlaytimeTracker.application.listener;
 
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
 import io.github.llfesteal.PlaytimeTracker.domain.model.Player;

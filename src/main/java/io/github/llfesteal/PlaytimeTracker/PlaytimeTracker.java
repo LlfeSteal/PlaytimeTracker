@@ -2,14 +2,14 @@ package io.github.llfesteal.PlaytimeTracker;
 
 import fr.lifesteal.pluginframework.api.config.ConfigService;
 import fr.lifesteal.pluginframework.core.plugin.PluginBase;
-import io.github.llfesteal.PlaytimeTracker.Application.command.PlaytimeCommand;
-import io.github.llfesteal.PlaytimeTracker.Application.task.BackupSessionsTask;
+import io.github.llfesteal.PlaytimeTracker.application.command.PlaytimeCommand;
+import io.github.llfesteal.PlaytimeTracker.application.task.BackupSessionsTask;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
 import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerDataServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.SessionServiceImp;
-import io.github.llfesteal.PlaytimeTracker.Application.listener.PlayerListener;
+import io.github.llfesteal.PlaytimeTracker.application.listener.PlayerListener;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.DatabaseConfig;

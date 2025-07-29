@@ -1,4 +1,4 @@
-package io.github.llfesteal.PlaytimeTracker.Application.command;
+package io.github.llfesteal.PlaytimeTracker.application.command;
 
 import fr.lifesteal.pluginframework.core.command.CommandExecutor;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
