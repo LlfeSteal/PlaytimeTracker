@@ -5,8 +5,13 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.Configur
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactory;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class SessionRepositoryImp implements SessionRepository {
@@ -53,6 +58,29 @@ public class SessionRepositoryImp implements SessionRepository {
         } catch (SQLException e) {
             this.logger.severe("Error while updating end_date entry for session of player " + session.getPlayerId() + " : " + e.getMessage());
         }
+    }
+
+    @Override
+    public List<Session> getPlayerSessions(UUID playerId) {
+        List<Session> sessions = new ArrayList<>();
+
+        try(var connection = this.connectionFactory.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT start_date, end_date FROM `" + this.getTableFullName() + "` WHERE player_uuid = ?;");
+            statement.setString(1, playerId.toString());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                LocalDateTime startDate = resultSet.getTimestamp("start_date").toLocalDateTime();
+                LocalDateTime end_date =  resultSet.getTimestamp("end_date").toLocalDateTime();
+                sessions.add(new Session(playerId, startDate, end_date));
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            this.logger.severe("Error while getting entries for player " + playerId + " : " + e.getMessage());
+        }
+
+        return sessions;
     }
 
     private void createTableIfNotExist() {

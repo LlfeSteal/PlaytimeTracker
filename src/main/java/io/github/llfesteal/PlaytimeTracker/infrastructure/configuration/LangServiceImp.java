@@ -23,8 +23,8 @@ public class LangServiceImp extends ConfigServiceBase implements LangService {
     @Colorized
     @ConfigParam(paramKey = "message.playtime")
     private List<String> playtimeMessages = new ArrayList<>() {{
-        add("&aYour current playtime for this session is : %current_playtime%");
-        add("&aYour total playtime is : %total_playtime%");
+        add("&aYour current playtime for this session is : &e%current_playtime%");
+        add("&aYour total playtime is : &e%total_playtime%");
     }};
 
     public LangServiceImp(Logger logger, ConfigRepository configRepository) {

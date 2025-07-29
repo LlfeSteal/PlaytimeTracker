@@ -31,7 +31,7 @@ public class Session {
         return sessionEnd;
     }
 
-    public SessionDuration getDuration(boolean isSessionActive) {
-        return new SessionDuration(Duration.between(sessionStart, isSessionActive ? LocalDateTime.now() : sessionEnd));
+    public Duration getDuration(boolean isSessionActive) {
+        return Duration.between(sessionStart, isSessionActive ? LocalDateTime.now() : sessionEnd);
     }
 }

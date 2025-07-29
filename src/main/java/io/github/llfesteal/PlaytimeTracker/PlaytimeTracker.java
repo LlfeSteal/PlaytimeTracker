@@ -5,14 +5,16 @@ import fr.lifesteal.pluginframework.core.plugin.PluginBase;
 import io.github.llfesteal.PlaytimeTracker.Application.command.PlaytimeCommand;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
+import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerDataServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.SessionServiceImp;
 import io.github.llfesteal.PlaytimeTracker.Application.listener.PlayerListener;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationServiceImp;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.DatabaseConfig;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.ActiveSessionStorageImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.SessionStorageImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.PlayerDataStorageImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerDataManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactoryImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepositoryImp;
@@ -35,6 +37,7 @@ public class PlaytimeTracker extends PluginBase {
     private PlayerService playerService;
     private LangServiceImp langService;
     private ConfigurationServiceImp configurationService;
+    private PlayerDataServiceImp playerDataService;
 
     @Override
     public void init() {
@@ -47,10 +50,16 @@ public class PlaytimeTracker extends PluginBase {
         var connectionFactory = new ConnectionFactoryImp(this.logger, this.configurationService);
         var sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
         sessionRepository.init();
-        var sessionStorage = new ActiveSessionStorageImp(sessionManager, sessionRepository);
+        var sessionStorage = new SessionStorageImp(sessionManager, sessionRepository);
 
         this.sessionService = new SessionServiceImp(sessionStorage);
-        this.playerService = new PlayerServiceImp(this.sessionService);
+
+        var playerDataManager = new PlayerDataManagerImp();
+        var playerDataStorage = new PlayerDataStorageImp(sessionRepository, playerDataManager);
+
+        this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerDataStorage);
+
+        this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
     }
 
     @Override
@@ -66,6 +75,7 @@ public class PlaytimeTracker extends PluginBase {
                             .addExtraArgument(sessionService)
                             .addExtraArgument(langService)
                             .addExtraArgument(logger)
+                            .addExtraArgument(playerDataService)
                             .build())
                     .build());
         }};
