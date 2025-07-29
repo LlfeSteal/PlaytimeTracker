@@ -1,0 +1,21 @@
+package io.github.llfesteal.PlaytimeTracker.Application.listener;
+
+import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
+import io.github.llfesteal.PlaytimeTracker.domain.model.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+public class PlayerListener implements Listener {
+
+    private final PlayerService playerService;
+
+    public PlayerListener(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        this.playerService.onPlayerJoin(new Player(event.getPlayer().getUniqueId()));
+    }
+}
