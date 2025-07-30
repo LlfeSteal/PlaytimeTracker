@@ -11,9 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,9 +42,9 @@ public class PlaytimeLookupCommand extends CommandExecutor {
 
         OfflinePlayer player = StringUtils.isUUID(playerIdentifier)
                 ? Bukkit.getOfflinePlayer(UUID.fromString(playerIdentifier))
-                : Bukkit.getPlayer(playerIdentifier);
+                : Bukkit.getOfflinePlayer(playerIdentifier);
 
-        if (player == null || !player.hasPlayedBefore()) {
+        if (!player.hasPlayedBefore()) {
             this.getIssuer().sendMessage(this.langService.getErrorPlayerNotFound(playerIdentifier));
             return false;
         }
@@ -55,10 +53,14 @@ public class PlaytimeLookupCommand extends CommandExecutor {
         this.playerName = player.getName();
 
         var startDateArg = this.getArg("start_date");
-        this.startDate = startDateArg != null ? LocalDateTime.parse(startDateArg) : null;
+        this.startDate = startDateArg != null
+                ? LocalDateTime.parse(startDateArg)
+                : LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getFirstPlayed()), ZoneId.systemDefault());
 
         var endDateArg = this.getArg("end_date");
-        this.endDate = endDateArg != null ? LocalDateTime.parse(endDateArg) : null;
+        this.endDate = endDateArg != null
+                ? LocalDateTime.parse(endDateArg)
+                : LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastPlayed()), ZoneId.systemDefault());;
 
         return true;
     }
