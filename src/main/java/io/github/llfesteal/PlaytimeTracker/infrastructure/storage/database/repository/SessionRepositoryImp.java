@@ -71,8 +71,8 @@ public class SessionRepositoryImp implements SessionRepository {
 
             while (resultSet.next()) {
                 LocalDateTime startDate = resultSet.getTimestamp("start_date").toLocalDateTime();
-                LocalDateTime end_date =  resultSet.getTimestamp("end_date").toLocalDateTime();
-                sessions.add(new Session(playerId, startDate, end_date));
+                LocalDateTime endDate =  resultSet.getTimestamp("end_date").toLocalDateTime();
+                sessions.add(new Session(playerId, startDate, endDate));
             }
 
             statement.close();
