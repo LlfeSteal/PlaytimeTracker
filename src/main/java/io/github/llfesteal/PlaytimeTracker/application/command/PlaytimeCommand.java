@@ -4,6 +4,7 @@ import fr.lifesteal.pluginframework.core.command.CommandExecutor;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangService;
 import io.github.llfesteal.PlaytimeTracker.utils.TimeUtils;
 import org.bukkit.command.CommandSender;
@@ -18,15 +19,17 @@ public class PlaytimeCommand extends CommandExecutor {
     private final LangService langService;
     private final Logger logger;
     private final PlayerDataService playerDataService;
+    private final ConfigurationService configurationService;
 
     private Session playerSession;
 
-    public PlaytimeCommand(CommandSender issuer, Map<String, String> namedArgs, SessionService sessionService, LangService langService, Logger logger, PlayerDataService playerDataService) {
+    public PlaytimeCommand(CommandSender issuer, Map<String, String> namedArgs, SessionService sessionService, LangService langService, Logger logger, PlayerDataService playerDataService, ConfigurationService configurationService) {
         super(issuer, namedArgs);
         this.sessionService = sessionService;
         this.langService = langService;
         this.logger = logger;
         this.playerDataService = playerDataService;
+        this.configurationService = configurationService;
     }
 
     @Override
@@ -50,10 +53,10 @@ public class PlaytimeCommand extends CommandExecutor {
     @Override
     public boolean execute() {
         var currentPlaytime = this.sessionService.getPlayerCurrentSessionDuration(this.playerSession.getPlayerId());
-        var formattedCurrentPlaytime = TimeUtils.format(currentPlaytime, "%d days, %02d hours, %02d minutes, %02d seconds");
+        var formattedCurrentPlaytime = TimeUtils.format(currentPlaytime, this.configurationService.getDurationFormat());
 
         var totalPlaytime = this.playerDataService.getTotalSavedSessionsDuration(this.playerSession.getPlayerId()).plus(currentPlaytime);
-        var formattedTotalPlaytime = TimeUtils.format(totalPlaytime, "%d days, %02d hours, %02d minutes, %02d seconds");
+        var formattedTotalPlaytime = TimeUtils.format(totalPlaytime, this.configurationService.getDurationFormat());
 
         this.getIssuer().sendMessage(this.langService.getPlaytimeMessages(formattedCurrentPlaytime, formattedTotalPlaytime).toArray(new String[0]));
 

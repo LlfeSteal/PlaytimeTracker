@@ -15,6 +15,9 @@ public class ConfigurationServiceImp extends ConfigServiceBase implements Config
     @ConfigParam(paramKey = "autosave-delay")
     private long autosaveDelay = 5000L;
 
+    @ConfigParam(paramKey = "duration-format")
+    private String durationFormat = "%d days, %02d hours, %02d minutes, %02d seconds";
+
     public ConfigurationServiceImp(Logger logger, ConfigRepository configRepository) {
         super(logger, configRepository);
     }
@@ -27,5 +30,10 @@ public class ConfigurationServiceImp extends ConfigServiceBase implements Config
     @Override
     public long getAutosaveDelay() {
         return autosaveDelay;
+    }
+
+    @Override
+    public String getDurationFormat() {
+        return durationFormat;
     }
 }

@@ -6,4 +6,6 @@ public interface ConfigurationService {
     DatabaseConfig getDatabaseConfig();
 
     long getAutosaveDelay();
+
+    String getDurationFormat();
 }

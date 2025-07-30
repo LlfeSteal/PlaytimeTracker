@@ -104,6 +104,7 @@ public class PlaytimeTracker extends PluginBase {
                             .addExtraArgument(langService)
                             .addExtraArgument(logger)
                             .addExtraArgument(playerDataService)
+                            .addExtraArgument(configurationService)
                             .build())
                     .build());
         }};

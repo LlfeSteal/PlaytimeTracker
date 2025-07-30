@@ -1,6 +1,7 @@
 package io.github.llfesteal.PlaytimeTracker.application.placeholder;
 
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
 import io.github.llfesteal.PlaytimeTracker.utils.TimeUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
@@ -12,10 +13,12 @@ public class CurrentPlaytimePlaceholder extends PlaceholderExpansion {
 
     private final Plugin plugin;
     private final SessionService sessionService;
+    private final ConfigurationService configurationService;
 
-    public CurrentPlaytimePlaceholder(Plugin plugin, SessionService sessionService) {
+    public CurrentPlaytimePlaceholder(Plugin plugin, SessionService sessionService, ConfigurationService configurationService) {
         this.plugin = plugin;
         this.sessionService = sessionService;
+        this.configurationService = configurationService;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class CurrentPlaytimePlaceholder extends PlaceholderExpansion {
         }
 
         return (params.equalsIgnoreCase("formatted"))
-                ? TimeUtils.format(sessionDuration, "%d days, %02d hours, %02d minutes, %02d seconds")
+                ? TimeUtils.format(sessionDuration, this.configurationService.getDurationFormat())
                 : String.valueOf(sessionDuration.toSeconds());
     }
 }
