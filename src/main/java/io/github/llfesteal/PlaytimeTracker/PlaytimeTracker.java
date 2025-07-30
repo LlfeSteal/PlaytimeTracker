@@ -7,6 +7,7 @@ import io.github.llfesteal.PlaytimeTracker.application.api.PlaytimeTrackerAPIImp
 import io.github.llfesteal.PlaytimeTracker.application.command.PlaytimeCommand;
 import io.github.llfesteal.PlaytimeTracker.application.command.PlaytimeLookupCommand;
 import io.github.llfesteal.PlaytimeTracker.application.placeholder.CurrentPlaytimePlaceholder;
+import io.github.llfesteal.PlaytimeTracker.application.placeholder.TodayPlaytimePlaceholder;
 import io.github.llfesteal.PlaytimeTracker.application.placeholder.TotalPlaytimePlaceholder;
 import io.github.llfesteal.PlaytimeTracker.application.task.BackupSessionsTask;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
@@ -95,6 +96,7 @@ public class PlaytimeTracker extends PluginBase {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new CurrentPlaytimePlaceholder(this, this.sessionService, this.configurationService).register();
             new TotalPlaytimePlaceholder(this, this.sessionService, this.playerDataService, this.configurationService).register();
+            new TodayPlaytimePlaceholder(this, this.playerDataService, this.configurationService).register();
         }
     }
 
