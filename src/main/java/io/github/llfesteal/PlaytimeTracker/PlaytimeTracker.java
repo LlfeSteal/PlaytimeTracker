@@ -91,6 +91,12 @@ public class PlaytimeTracker extends PluginBase {
     }
 
     @Override
+    public void onDisable() {
+        this.sessionService.forceSaveSessions();
+        super.onDisable();
+    }
+
+    @Override
     protected List<Command> registerCommands() {
         return new ArrayList<>() {{
             add(getPluginCommandFactory()
