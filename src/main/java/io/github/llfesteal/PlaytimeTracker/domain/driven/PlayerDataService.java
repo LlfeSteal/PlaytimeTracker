@@ -1,7 +1,6 @@
 package io.github.llfesteal.PlaytimeTracker.domain.driven;
 
-import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerData;
-
+import java.time.Duration;
 import java.util.UUID;
 
 public interface PlayerDataService {
@@ -9,5 +8,5 @@ public interface PlayerDataService {
 
     void unloadPlayerData(UUID playerId);
 
-    PlayerData getPlayerData(UUID playerId);
+    Duration getTotalSavedSessionsDuration(UUID playerId);
 }

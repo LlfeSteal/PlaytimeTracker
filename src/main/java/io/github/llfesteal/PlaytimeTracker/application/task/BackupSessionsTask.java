@@ -12,7 +12,6 @@ public class BackupSessionsTask implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("SAVEDDDDDDDDDDDDDDD");
         this.sessionService.forceSaveSessions();
     }
 }

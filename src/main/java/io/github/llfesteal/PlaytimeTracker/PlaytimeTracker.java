@@ -3,6 +3,8 @@ package io.github.llfesteal.PlaytimeTracker;
 import fr.lifesteal.pluginframework.api.config.ConfigService;
 import fr.lifesteal.pluginframework.core.plugin.PluginBase;
 import io.github.llfesteal.PlaytimeTracker.application.command.PlaytimeCommand;
+import io.github.llfesteal.PlaytimeTracker.application.placeholder.CurrentPlaytimePlaceholder;
+import io.github.llfesteal.PlaytimeTracker.application.placeholder.TotalPlaytimePlaceholder;
 import io.github.llfesteal.PlaytimeTracker.application.task.BackupSessionsTask;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
@@ -21,6 +23,7 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.P
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactoryImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepositoryImp;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
@@ -37,9 +40,9 @@ public class PlaytimeTracker extends PluginBase {
     }
 
     private final SchedulerService schedulerService = new BukkitSchedulerWrapper(this);
-    private List<BukkitTask> tasks = new ArrayList<>();
+    private final List<BukkitTask> tasks = new ArrayList<>();
 
-    private Logger logger = getLogger();
+    private final Logger logger = getLogger();
     private SessionService sessionService;
     private PlayerService playerService;
     private LangServiceImp langService;
@@ -68,14 +71,23 @@ public class PlaytimeTracker extends PluginBase {
 
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
         initSchedulers();
+        initPlaceholders();
     }
 
     private void initSchedulers() {
         for (BukkitTask task : this.tasks) {
             task.cancel();
         }
+        this.tasks.clear();
 
         tasks.add(this.schedulerService.runTaskTimerAsynchronously(new BackupSessionsTask(this.sessionService), this.configurationService.getAutosaveDelay(), this.configurationService.getAutosaveDelay()));
+    }
+
+    private void initPlaceholders() {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new CurrentPlaytimePlaceholder(this, this.sessionService, this.configurationService).register();
+            new TotalPlaytimePlaceholder(this, this.sessionService, this.playerDataService, this.configurationService).register();
+        }
     }
 
     @Override

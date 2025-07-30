@@ -4,6 +4,7 @@ import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
 import io.github.llfesteal.PlaytimeTracker.domain.driving.SessionStorage;
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -39,5 +40,11 @@ public class SessionServiceImp implements SessionService {
             session.setSessionEnd(LocalDateTime.now());
             this.sessionStorage.updateSessionEndDate(session);
         }
+    }
+
+    @Override
+    public Duration getPlayerCurrentSessionDuration(UUID playerId) {
+        var session = this.getSessionByPlayerId(playerId);
+        return session == null ? null : session.getDuration(true);
     }
 }

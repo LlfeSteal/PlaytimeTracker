@@ -49,10 +49,10 @@ public class PlaytimeCommand extends CommandExecutor {
 
     @Override
     public boolean execute() {
-        var currentPlaytime = this.playerSession.getDuration(true);
+        var currentPlaytime = this.sessionService.getPlayerCurrentSessionDuration(this.playerSession.getPlayerId());
         var formattedCurrentPlaytime = TimeUtils.format(currentPlaytime, "%d days, %02d hours, %02d minutes, %02d seconds");
 
-        var totalPlaytime = this.playerDataService.getPlayerData(this.playerSession.getPlayerId()).getSavedPlaytime().plus(currentPlaytime);
+        var totalPlaytime = this.playerDataService.getTotalSavedSessionsDuration(this.playerSession.getPlayerId()).plus(currentPlaytime);
         var formattedTotalPlaytime = TimeUtils.format(totalPlaytime, "%d days, %02d hours, %02d minutes, %02d seconds");
 
         this.getIssuer().sendMessage(this.langService.getPlaytimeMessages(formattedCurrentPlaytime, formattedTotalPlaytime).toArray(new String[0]));

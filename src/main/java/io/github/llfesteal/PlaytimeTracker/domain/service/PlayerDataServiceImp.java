@@ -33,8 +33,8 @@ public class PlayerDataServiceImp implements PlayerDataService {
     }
 
     @Override
-    public PlayerData getPlayerData(UUID playerId) {
-        return this.playerDataStorage.getData(playerId);
+    public Duration getTotalSavedSessionsDuration(UUID playerId) {
+        return this.playerDataStorage.getData(playerId).getSavedPlaytime();
     }
 
     private PlayerData getPlayerData(UUID playerId, List<Session> sessions) {
