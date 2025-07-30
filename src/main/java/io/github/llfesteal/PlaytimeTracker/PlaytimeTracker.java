@@ -2,6 +2,8 @@ package io.github.llfesteal.PlaytimeTracker;
 
 import fr.lifesteal.pluginframework.api.config.ConfigService;
 import fr.lifesteal.pluginframework.core.plugin.PluginBase;
+import io.github.llfesteal.PlaytimeTracker.application.api.PlaytimeTrackerAPI;
+import io.github.llfesteal.PlaytimeTracker.application.api.PlaytimeTrackerAPIImp;
 import io.github.llfesteal.PlaytimeTracker.application.command.PlaytimeCommand;
 import io.github.llfesteal.PlaytimeTracker.application.placeholder.CurrentPlaytimePlaceholder;
 import io.github.llfesteal.PlaytimeTracker.application.placeholder.TotalPlaytimePlaceholder;
@@ -48,6 +50,7 @@ public class PlaytimeTracker extends PluginBase {
     private LangServiceImp langService;
     private ConfigurationServiceImp configurationService;
     private PlayerDataServiceImp playerDataService;
+    private PlaytimeTrackerAPI api;
 
     @Override
     public void init() {
@@ -72,6 +75,11 @@ public class PlaytimeTracker extends PluginBase {
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
         initSchedulers();
         initPlaceholders();
+        this.api =  new PlaytimeTrackerAPIImp(this.sessionService);
+    }
+
+    public PlaytimeTrackerAPI getApi() {
+        return this.api;
     }
 
     private void initSchedulers() {
