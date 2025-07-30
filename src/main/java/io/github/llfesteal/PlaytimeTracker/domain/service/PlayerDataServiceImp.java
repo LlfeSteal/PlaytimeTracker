@@ -7,6 +7,7 @@ import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerData;
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +36,12 @@ public class PlayerDataServiceImp implements PlayerDataService {
     @Override
     public Duration getTotalSavedSessionsDuration(UUID playerId) {
         return this.playerDataStorage.getData(playerId).getSavedPlaytime();
+    }
+
+    @Override
+    public PlayerData getPlayerData(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
+        var sessions = this.sessionStorage.getPlayerSessions(playerId, startDate, endDate);
+        return getPlayerData(playerId, sessions);
     }
 
     private PlayerData getPlayerData(UUID playerId, List<Session> sessions) {

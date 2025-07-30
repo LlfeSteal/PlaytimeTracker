@@ -27,6 +27,14 @@ public class LangServiceImp extends ConfigServiceBase implements LangService {
         add("&aYour total playtime is : &e%total_playtime%");
     }};
 
+    @Colorized
+    @ConfigParam(paramKey = "error.player-not-found")
+    private String errorPlayerNotFound = "&cPlayer %player% not found !";
+
+    @Colorized
+    @ConfigParam(paramKey = "message.lookup")
+    private String lookupMessage = "%player% &ahas played &e%playtime% &abetween &b%start_date% &aand &b%end_date% &a!";
+
     public LangServiceImp(Logger logger, ConfigRepository configRepository) {
         super(logger, configRepository);
     }
@@ -48,5 +56,19 @@ public class LangServiceImp extends ConfigServiceBase implements LangService {
                         .replaceAll("%current_playtime%", formattedCurrentPlaytime)
                         .replaceAll("%total_playtime%", formattedTotalPlaytime))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPlaytimeLookupMessage(String playerName, String duration, String startDate, String endDate) {
+        return lookupMessage
+                .replaceAll("%player%", playerName)
+                .replaceAll("%playtime%", duration)
+                .replaceAll("%start_date%", startDate)
+                .replaceAll("%end_date%", endDate);
+    }
+
+    @Override
+    public String getErrorPlayerNotFound(String playerIdentifier) {
+        return errorPlayerNotFound.replaceAll("%player%", playerIdentifier);
     }
 }

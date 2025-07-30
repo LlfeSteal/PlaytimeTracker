@@ -2,6 +2,7 @@ package io.github.llfesteal.PlaytimeTracker.domain.driving;
 
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,4 +18,6 @@ public interface SessionStorage {
     List<Session> getAllPlayerSessions(UUID playerId);
 
     List<Session> getAllActiveSessions();
+
+    List<Session> getPlayerSessions(UUID playerId, LocalDateTime startDate, LocalDateTime endDate);
 }

@@ -5,6 +5,7 @@ import fr.lifesteal.pluginframework.core.plugin.PluginBase;
 import io.github.llfesteal.PlaytimeTracker.application.api.PlaytimeTrackerAPI;
 import io.github.llfesteal.PlaytimeTracker.application.api.PlaytimeTrackerAPIImp;
 import io.github.llfesteal.PlaytimeTracker.application.command.PlaytimeCommand;
+import io.github.llfesteal.PlaytimeTracker.application.command.PlaytimeLookupCommand;
 import io.github.llfesteal.PlaytimeTracker.application.placeholder.CurrentPlaytimePlaceholder;
 import io.github.llfesteal.PlaytimeTracker.application.placeholder.TotalPlaytimePlaceholder;
 import io.github.llfesteal.PlaytimeTracker.application.task.BackupSessionsTask;
@@ -75,7 +76,7 @@ public class PlaytimeTracker extends PluginBase {
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
         initSchedulers();
         initPlaceholders();
-        this.api =  new PlaytimeTrackerAPIImp(this.sessionService);
+        this.api =  new PlaytimeTrackerAPIImp(this.sessionService, this.playerDataService);
     }
 
     public PlaytimeTrackerAPI getApi() {
@@ -119,6 +120,15 @@ public class PlaytimeTracker extends PluginBase {
                             .addExtraArgument(logger)
                             .addExtraArgument(playerDataService)
                             .addExtraArgument(configurationService)
+                            .build())
+                    .addSubCommands(getCommandBaseBuilder()
+                            .setName("lookup")
+                            .setPermission("playtime.lookup")
+                            .setUsage("playtime lookup [player] <start_date> <end_date>")
+                            .setExecutorType(PlaytimeLookupCommand.class)
+                            .addExtraArgument(playerDataService)
+                            .addExtraArgument(configurationService)
+                            .addExtraArgument(langService)
                             .build())
                     .build());
         }};

@@ -5,6 +5,7 @@ import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManager;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,5 +49,10 @@ public class SessionStorageImp implements SessionStorage {
     @Override
     public List<Session> getAllActiveSessions() {
         return this.sessionManager.getAll();
+    }
+
+    @Override
+    public List<Session> getPlayerSessions(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
+        return this.sessionRepository.getPlayerSessions(playerId, startDate, endDate);
     }
 }
