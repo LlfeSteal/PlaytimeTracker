@@ -22,7 +22,9 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.BukkitSchedul
 import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.SchedulerService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.SessionStorageImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.PlayerDataStorageImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerDataManager;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerDataManagerImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManager;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactoryImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepositoryImp;
@@ -45,6 +47,8 @@ public class PlaytimeTracker extends PluginBase {
     private final SchedulerService schedulerService = new BukkitSchedulerWrapper(this);
     private final List<BukkitTask> tasks = new ArrayList<>();
 
+    private final SessionManager sessionManager = new SessionManagerImp();
+    private final PlayerDataManager playerDataManager = new PlayerDataManagerImp();
     private final Logger logger = getLogger();
     private SessionService sessionService;
     private PlayerService playerService;
@@ -55,8 +59,6 @@ public class PlaytimeTracker extends PluginBase {
 
     @Override
     public void init() {
-        var sessionManager = new SessionManagerImp();
-
         var langConfigurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "lang.yml");
         this.langService = new LangServiceImp(this.logger, langConfigurationRepository);
         var configurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "config.yml");
@@ -64,13 +66,10 @@ public class PlaytimeTracker extends PluginBase {
         var connectionFactory = new ConnectionFactoryImp(this.logger, this.configurationService);
         var sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
         sessionRepository.init();
-        var sessionStorage = new SessionStorageImp(sessionManager, sessionRepository);
-
+        var sessionStorage = new SessionStorageImp(this.sessionManager, sessionRepository);
         this.sessionService = new SessionServiceImp(sessionStorage);
 
-        var playerDataManager = new PlayerDataManagerImp();
-        var playerDataStorage = new PlayerDataStorageImp(sessionRepository, playerDataManager);
-
+        var playerDataStorage = new PlayerDataStorageImp(sessionRepository, this.playerDataManager);
         this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerDataStorage);
 
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
