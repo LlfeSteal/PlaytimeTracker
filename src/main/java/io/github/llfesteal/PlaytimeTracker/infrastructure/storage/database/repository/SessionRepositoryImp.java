@@ -83,36 +83,6 @@ public class SessionRepositoryImp implements SessionRepository {
         return sessions;
     }
 
-    @Override
-    public List<Session> getPlayerSessions(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
-        List<Session> sessions = new ArrayList<>();
-
-        try(var connection = this.connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT GREATEST(start_date, ?) AS effective_start, LEAST(end_date, ?) AS effective_end " +
-                            "FROM `" + this.getTableFullName() + "` " +
-                            "WHERE player_uuid = ? AND start_date <= ? AND end_date >= ?;");
-            statement.setTimestamp(1, Timestamp.valueOf(startDate));
-            statement.setTimestamp(2, Timestamp.valueOf(endDate));
-            statement.setString(3, playerId.toString());
-            statement.setTimestamp(4, Timestamp.valueOf(endDate));
-            statement.setTimestamp(5, Timestamp.valueOf(startDate));
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                LocalDateTime rowStartDate = resultSet.getTimestamp("effective_start").toLocalDateTime();
-                LocalDateTime rowEndDate =  resultSet.getTimestamp("effective_end").toLocalDateTime();
-                sessions.add(new Session(playerId, rowStartDate, rowEndDate));
-            }
-
-            statement.close();
-        } catch (SQLException e) {
-            this.logger.severe("Error while getting entries for player " + playerId + " : " + e.getMessage());
-        }
-
-        return sessions;
-    }
-
     private void createTableIfNotExist() {
         try(var connection = this.connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(getInitRequest());

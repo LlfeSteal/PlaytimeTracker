@@ -11,7 +11,7 @@ public interface PlayerDataService {
 
     void unloadPlayerData(UUID playerId);
 
-    Duration getTotalSavedSessionsDuration(UUID playerId);
+    Duration getTotalPlayerPlaytime(UUID playerId);
 
-    PlayerData getPlayerData(UUID playerId, LocalDateTime startDate, LocalDateTime endDate);
+    Duration getPlayerPlaytime(UUID playerId, LocalDateTime startDate, LocalDateTime endDate);
 }

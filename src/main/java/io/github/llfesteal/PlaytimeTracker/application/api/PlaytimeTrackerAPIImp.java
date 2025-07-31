@@ -42,7 +42,7 @@ public final class PlaytimeTrackerAPIImp implements PlaytimeTrackerAPI {
 
     @Override
     public Duration getPlayerPlaytime(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
-        return this.playerDataService.getPlayerData(playerId, startDate, endDate).getSavedPlaytime();
+        return this.playerDataService.getPlayerPlaytime(playerId, startDate, endDate);
     }
 
     private Session toApiModel(io.github.llfesteal.PlaytimeTracker.domain.model.Session model) {

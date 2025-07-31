@@ -13,6 +13,4 @@ public interface SessionRepository {
     void updateSessionEndDate(Session session);
 
     List<Session> getPlayerSessions(UUID playerId);
-
-    List<Session> getPlayerSessions(UUID playerId, LocalDateTime startDate, LocalDateTime endDate);
 }

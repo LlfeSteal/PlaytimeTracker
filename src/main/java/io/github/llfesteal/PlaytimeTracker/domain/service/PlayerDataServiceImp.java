@@ -2,56 +2,56 @@ package io.github.llfesteal.PlaytimeTracker.domain.service;
 
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
 import io.github.llfesteal.PlaytimeTracker.domain.driving.SessionStorage;
-import io.github.llfesteal.PlaytimeTracker.domain.driving.PlayerDataStorage;
-import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerData;
-import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
+import io.github.llfesteal.PlaytimeTracker.domain.driving.PlayerPlaytimeStorage;
+import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerPlaytime;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public class PlayerDataServiceImp implements PlayerDataService {
 
     private final SessionStorage sessionStorage;
-    private final PlayerDataStorage playerDataStorage;
+    private final PlayerPlaytimeStorage playerPlaytimeStorage;
 
-    public PlayerDataServiceImp(SessionStorage sessionStorage, PlayerDataStorage playerDataStorage) {
+    public PlayerDataServiceImp(SessionStorage sessionStorage, PlayerPlaytimeStorage playerPlaytimeStorage) {
         this.sessionStorage = sessionStorage;
-        this.playerDataStorage = playerDataStorage;
+        this.playerPlaytimeStorage = playerPlaytimeStorage;
     }
 
     @Override
     public void loadPlayerData(UUID playerId) {
-        var sessions = this.sessionStorage.getAllPlayerSessions(playerId);
-        var playerData = this.getPlayerData(playerId, sessions);
-        this.playerDataStorage.store(playerData);
+        var playerPlaytime = new PlayerPlaytime(playerId, this.sessionStorage.getAllPlayerSessions(playerId));
+        this.playerPlaytimeStorage.store(playerPlaytime);
     }
 
     @Override
     public void unloadPlayerData(UUID playerId) {
-        this.playerDataStorage.unstore(playerId);
+        this.playerPlaytimeStorage.unstore(playerId);
     }
 
     @Override
-    public Duration getTotalSavedSessionsDuration(UUID playerId) {
-        return this.playerDataStorage.getData(playerId).getSavedPlaytime();
+    public Duration getTotalPlayerPlaytime(UUID playerId) {
+        var playerPlaytime = getPlayerPlaytime(playerId);
+        var currentPlaytime = this.sessionStorage.getSessionByPlayerId(playerId);
+
+        return currentPlaytime == null
+                ? playerPlaytime.getTotalDuration()
+                : playerPlaytime.getTotalDuration().plus(currentPlaytime.getDuration(true));
     }
 
     @Override
-    public PlayerData getPlayerData(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
-        var sessions = this.sessionStorage.getPlayerSessions(playerId, startDate, endDate);
-        return getPlayerData(playerId, sessions);
+    public Duration getPlayerPlaytime(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
+        var playerPlaytime = getPlayerPlaytime(playerId);
+
+        return playerPlaytime.getDuration(startDate, endDate);
     }
 
-    private PlayerData getPlayerData(UUID playerId, List<Session> sessions) {
-        var totalDuration = Duration.ZERO;
+    private PlayerPlaytime getPlayerPlaytime(UUID playerId) {
+        var playerPlaytime = this.playerPlaytimeStorage.getPlaytime(playerId);
 
-        for (Session session : sessions) {
-            totalDuration = totalDuration.plus(session.getDuration(false));
-        }
-
-        // TODO : Implement playerName
-        return new PlayerData(playerId, "NOT_YET_IMPLEMENTED", totalDuration);
+        return playerPlaytime != null
+                ? playerPlaytime
+                : new PlayerPlaytime(playerId, this.sessionStorage.getAllPlayerSessions(playerId));
     }
 }

@@ -12,6 +12,7 @@ import io.github.llfesteal.PlaytimeTracker.application.placeholder.TotalPlaytime
 import io.github.llfesteal.PlaytimeTracker.application.task.BackupSessionsTask;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
+import io.github.llfesteal.PlaytimeTracker.domain.driving.PlayerPlaytimeStorage;
 import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerDataServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.SessionServiceImp;
@@ -22,9 +23,9 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.Da
 import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.BukkitSchedulerWrapper;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.SchedulerService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.SessionStorageImp;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.PlayerDataStorageImp;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerDataManager;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerDataManagerImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.PlayerPlaytimeStorageImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerPlaytimeManager;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerPlaytimeManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManager;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactoryImp;
@@ -49,7 +50,7 @@ public class PlaytimeTracker extends PluginBase {
     private final List<BukkitTask> tasks = new ArrayList<>();
 
     private final SessionManager sessionManager = new SessionManagerImp();
-    private final PlayerDataManager playerDataManager = new PlayerDataManagerImp();
+    private final PlayerPlaytimeStorage playerPlaytimeStorage = new PlayerPlaytimeManagerImp();
     private final Logger logger = getLogger();
     private SessionService sessionService;
     private PlayerService playerService;
@@ -70,8 +71,7 @@ public class PlaytimeTracker extends PluginBase {
         var sessionStorage = new SessionStorageImp(this.sessionManager, sessionRepository);
         this.sessionService = new SessionServiceImp(sessionStorage);
 
-        var playerDataStorage = new PlayerDataStorageImp(sessionRepository, this.playerDataManager);
-        this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerDataStorage);
+        this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerPlaytimeStorage);
 
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
         initSchedulers();

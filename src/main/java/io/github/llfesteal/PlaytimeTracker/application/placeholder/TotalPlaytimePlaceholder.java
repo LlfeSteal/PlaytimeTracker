@@ -58,7 +58,7 @@ public class TotalPlaytimePlaceholder extends PlaceholderExpansion {
     }
 
     private String getPlaceholderValue(UUID playerId, @NotNull String params) {
-        var totalPlaytime = this.playerDataService.getTotalSavedSessionsDuration(playerId);
+        var totalPlaytime = this.playerDataService.getTotalPlayerPlaytime(playerId);
 
         var currentPlaytime = this.sessionService.getPlayerCurrentSessionDuration(playerId);
         if (currentPlaytime != null) {

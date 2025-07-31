@@ -67,8 +67,9 @@ public class PlaytimeLookupCommand extends CommandExecutor {
 
     @Override
     public boolean execute() {
-        var playerData = this.playerDataService.getPlayerData(this.playerUUID,  this.startDate, this.endDate);
-        var formattedDuration = TimeUtils.format(playerData.getSavedPlaytime(), this.configurationService.getDurationFormat());
+        var playerPlaytime = this.playerDataService.getPlayerPlaytime(this.playerUUID,  this.startDate, this.endDate);
+        var formattedDuration = TimeUtils.format(playerPlaytime, this.configurationService.getDurationFormat());
+
         this.getIssuer().sendMessage(this.langService.getPlaytimeLookupMessage(this.playerName, formattedDuration, this.startDate.toString(), this.endDate.toString()));
 
         return true;

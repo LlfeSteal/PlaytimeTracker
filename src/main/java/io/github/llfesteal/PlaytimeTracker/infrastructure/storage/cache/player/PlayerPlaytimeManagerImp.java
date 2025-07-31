@@ -1,27 +1,29 @@
 package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player;
 
+import io.github.llfesteal.PlaytimeTracker.domain.driving.PlayerPlaytimeStorage;
 import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerData;
+import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerPlaytime;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PlayerDataManagerImp implements PlayerDataManager {
+public class PlayerPlaytimeManagerImp implements PlayerPlaytimeStorage {
 
-    private final Map<UUID, PlayerData> playersData = new ConcurrentHashMap<>();
+    private final Map<UUID, PlayerPlaytime> playersData = new ConcurrentHashMap<>();
 
     @Override
-    public void add(PlayerData playerData) {
+    public void store(PlayerPlaytime playerData) {
         this.playersData.put(playerData.getPlayerId(), playerData);
     }
 
     @Override
-    public void remove(UUID playerId) {
+    public void unstore(UUID playerId) {
         this.playersData.remove(playerId);
     }
 
     @Override
-    public PlayerData get(UUID playerId) {
+    public PlayerPlaytime getPlaytime(UUID playerId) {
         return this.playersData.get(playerId);
     }
 }

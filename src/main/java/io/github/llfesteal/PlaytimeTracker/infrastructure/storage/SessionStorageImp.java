@@ -26,7 +26,7 @@ public class SessionStorageImp implements SessionStorage {
     }
 
     @Override
-    public Session findByPlayerId(UUID playerId) {
+    public Session getSessionByPlayerId(UUID playerId) {
         return this.sessionManager.getByPlayerId(playerId);
     }
 
@@ -49,10 +49,5 @@ public class SessionStorageImp implements SessionStorage {
     @Override
     public List<Session> getAllActiveSessions() {
         return this.sessionManager.getAll();
-    }
-
-    @Override
-    public List<Session> getPlayerSessions(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
-        return this.sessionRepository.getPlayerSessions(playerId, startDate, endDate);
     }
 }
