@@ -96,7 +96,7 @@ public class PlaytimeTracker extends PluginBase {
         }
         this.tasks.clear();
 
-        tasks.add(this.schedulerService.runTaskTimerAsynchronously(new BackupSessionsTask(this.sessionService), this.configurationService.getAutosaveDelay(), this.configurationService.getAutosaveDelay()));
+        tasks.add(this.schedulerService.runTaskTimerAsynchronously(new BackupSessionsTask(this.logger, this.sessionService), this.configurationService.getAutosaveDelay(), this.configurationService.getAutosaveDelay()));
     }
 
     private void initPlaceholders() {
