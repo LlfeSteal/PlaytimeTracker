@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 
 public class TodayPlaytimePlaceholder extends PlaceholderExpansion {
@@ -56,7 +55,7 @@ public class TodayPlaytimePlaceholder extends PlaceholderExpansion {
         return this.getPlaceholderValue(player.getUniqueId(), params);
     }
 
-    private @Nullable String getPlaceholderValue(UUID playerId, @NotNull String params) {
+    private @NotNull String getPlaceholderValue(UUID playerId, @NotNull String params) {
         var playerPlaytime = this.playerDataService.getPlayerPlaytime(playerId, LocalDate.now().atStartOfDay(), LocalDate.now().plusDays(1).atStartOfDay());
 
         return (params.equalsIgnoreCase("formatted"))

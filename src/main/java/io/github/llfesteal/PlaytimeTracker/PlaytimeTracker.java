@@ -102,7 +102,7 @@ public class PlaytimeTracker extends PluginBase {
     private void initPlaceholders() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new CurrentPlaytimePlaceholder(this, this.sessionService, this.configurationService).register();
-            new TotalPlaytimePlaceholder(this, this.sessionService, this.playerDataService, this.configurationService).register();
+            new TotalPlaytimePlaceholder(this, this.playerDataService, this.configurationService).register();
             new TodayPlaytimePlaceholder(this, this.playerDataService, this.configurationService).register();
         }
     }
