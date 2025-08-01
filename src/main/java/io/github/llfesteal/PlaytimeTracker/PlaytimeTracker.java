@@ -61,16 +61,21 @@ public class PlaytimeTracker extends PluginBase {
 
     @Override
     public void init() {
+        // Configuration
         var langConfigurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "lang.yml");
         this.langService = new LangServiceImp(this.logger, langConfigurationRepository);
         var configurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "config.yml");
         this.configurationService = new ConfigurationServiceImp(this.logger, configurationRepository);
+
+        // Services
         var connectionFactory = new ConnectionFactoryImp(this.logger, this.configurationService);
         this.sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
         var sessionStorage = new SessionStorageImp(this.sessionManager, sessionRepository);
         this.sessionService = new SessionServiceImp(sessionStorage);
         this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerPlaytimeStorage);
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
+
+        // API
         this.api = new PlaytimeTrackerAPIImp(this.sessionService, this.playerDataService);
     }
 
