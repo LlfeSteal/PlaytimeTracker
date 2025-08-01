@@ -60,8 +60,7 @@ public class PlaytimeLookupCommand extends CommandExecutor {
         var endDateArg = this.getArg("end_date");
         this.endDate = endDateArg != null
                 ? LocalDateTime.parse(endDateArg)
-                : LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastPlayed()), ZoneId.systemDefault());
-        ;
+                : player.isOnline() ? LocalDateTime.now() : LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastPlayed()), ZoneId.systemDefault());
 
         return true;
     }
