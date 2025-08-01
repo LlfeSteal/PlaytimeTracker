@@ -44,7 +44,7 @@ public class PlaytimeLookupCommand extends CommandExecutor {
                 ? Bukkit.getOfflinePlayer(UUID.fromString(playerIdentifier))
                 : Bukkit.getOfflinePlayer(playerIdentifier);
 
-        if (!player.hasPlayedBefore()) {
+        if (!player.hasPlayedBefore() && !player.isOnline()) {
             this.getIssuer().sendMessage(this.langService.getErrorPlayerNotFound(playerIdentifier));
             return false;
         }
