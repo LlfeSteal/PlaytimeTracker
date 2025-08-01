@@ -27,6 +27,7 @@ import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.P
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManager;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactoryImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepository;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepositoryImp;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -49,6 +50,7 @@ public class PlaytimeTracker extends PluginBase {
 
     private final SessionManager sessionManager = new SessionManagerImp();
     private final PlayerPlaytimeStorage playerPlaytimeStorage = new PlayerPlaytimeManagerImp();
+    private SessionRepository sessionRepository;
     private final Logger logger = getLogger();
     private SessionService sessionService;
     private PlayerService playerService;
@@ -64,17 +66,19 @@ public class PlaytimeTracker extends PluginBase {
         var configurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "config.yml");
         this.configurationService = new ConfigurationServiceImp(this.logger, configurationRepository);
         var connectionFactory = new ConnectionFactoryImp(this.logger, this.configurationService);
-        var sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
-        sessionRepository.init();
+        this.sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
         var sessionStorage = new SessionStorageImp(this.sessionManager, sessionRepository);
         this.sessionService = new SessionServiceImp(sessionStorage);
-
         this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerPlaytimeStorage);
-
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
+        this.api = new PlaytimeTrackerAPIImp(this.sessionService, this.playerDataService);
+    }
+
+    @Override
+    public void postInit() {
+        sessionRepository.init();
         initSchedulers();
         initPlaceholders();
-        this.api = new PlaytimeTrackerAPIImp(this.sessionService, this.playerDataService);
     }
 
     public PlaytimeTrackerAPI getApi() {
