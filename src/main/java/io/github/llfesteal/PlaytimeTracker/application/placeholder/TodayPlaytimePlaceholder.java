@@ -57,7 +57,7 @@ public class TodayPlaytimePlaceholder extends PlaceholderExpansion {
     }
 
     private @Nullable String getPlaceholderValue(UUID playerId, @NotNull String params) {
-        var playerPlaytime = this.playerDataService.getPlayerPlaytime(playerId, LocalDate.now().atStartOfDay(), LocalDate.now().atTime(LocalTime.MAX));
+        var playerPlaytime = this.playerDataService.getPlayerPlaytime(playerId, LocalDate.now().atStartOfDay(), LocalDate.now().plusDays(1).atStartOfDay());
 
         return (params.equalsIgnoreCase("formatted"))
                 ? TimeUtils.format(playerPlaytime, this.configurationService.getDurationFormat())

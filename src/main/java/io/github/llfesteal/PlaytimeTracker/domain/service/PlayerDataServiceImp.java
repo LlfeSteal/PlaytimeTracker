@@ -33,18 +33,19 @@ public class PlayerDataServiceImp implements PlayerDataService {
     @Override
     public Duration getTotalPlayerPlaytime(UUID playerId) {
         var playerPlaytime = getPlayerPlaytime(playerId);
-        var currentPlaytime = this.sessionStorage.getSessionByPlayerId(playerId);
+        var currentSession = this.sessionStorage.getActiveSessionByPlayerId(playerId);
 
-        return currentPlaytime == null
+        return currentSession == null
                 ? playerPlaytime.getTotalDuration()
-                : playerPlaytime.getTotalDuration().plus(currentPlaytime.getDuration(true));
+                : playerPlaytime.getTotalDuration().plus(currentSession.getDuration());
     }
 
     @Override
     public Duration getPlayerPlaytime(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
         var playerPlaytime = getPlayerPlaytime(playerId);
+        var currentSession = this.sessionStorage.getActiveSessionByPlayerId(playerId);
 
-        return playerPlaytime.getDuration(startDate, endDate);
+        return playerPlaytime.getDuration(startDate, endDate, currentSession);
     }
 
     private PlayerPlaytime getPlayerPlaytime(UUID playerId) {

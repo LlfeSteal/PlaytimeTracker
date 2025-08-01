@@ -18,13 +18,13 @@ public class SessionServiceImp implements SessionService {
 
     @Override
     public void createNewSession(UUID playerId) {
-        var newSession = new Session(playerId, LocalDateTime.now(), LocalDateTime.now());
+        var newSession = new Session(playerId, LocalDateTime.now(), LocalDateTime.now(), true);
         sessionStorage.add(newSession);
     }
 
     @Override
     public Session getSessionByPlayerId(UUID playerId) {
-        return this.sessionStorage.getSessionByPlayerId(playerId);
+        return this.sessionStorage.getActiveSessionByPlayerId(playerId);
     }
 
     @Override
@@ -45,6 +45,6 @@ public class SessionServiceImp implements SessionService {
     @Override
     public Duration getPlayerCurrentSessionDuration(UUID playerId) {
         var session = this.getSessionByPlayerId(playerId);
-        return session == null ? null : session.getDuration(true);
+        return session == null ? null : session.getDuration();
     }
 }

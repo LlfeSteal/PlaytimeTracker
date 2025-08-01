@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface SessionStorage {
     void add(Session session);
 
-    Session getSessionByPlayerId(UUID playerId);
+    Session getActiveSessionByPlayerId(UUID playerId);
 
     void endSession(UUID playerId);
 

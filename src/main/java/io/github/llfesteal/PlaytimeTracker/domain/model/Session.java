@@ -7,12 +7,21 @@ import java.util.UUID;
 public class Session {
     private final UUID playerId;
     private final LocalDateTime sessionStart;
+    private final boolean isActive;
     private LocalDateTime sessionEnd;
 
     public Session(UUID playerId, LocalDateTime sessionStart, LocalDateTime sessionEnd) {
         this.playerId = playerId;
         this.sessionStart = sessionStart;
         this.sessionEnd = sessionEnd;
+        this.isActive = false;
+    }
+
+    public Session(UUID playerId, LocalDateTime sessionStart, LocalDateTime sessionEnd, boolean isActive) {
+        this.playerId = playerId;
+        this.sessionStart = sessionStart;
+        this.sessionEnd = sessionEnd;
+        this.isActive = isActive;
     }
 
     public UUID getPlayerId() {
@@ -24,14 +33,14 @@ public class Session {
     }
 
     public LocalDateTime getSessionEnd() {
-        return sessionEnd;
+        return this.isActive ? LocalDateTime.now() : sessionEnd;
     }
 
     public void setSessionEnd(LocalDateTime sessionEnd) {
         this.sessionEnd = sessionEnd;
     }
 
-    public Duration getDuration(boolean isSessionActive) {
-        return Duration.between(sessionStart, isSessionActive ? LocalDateTime.now() : sessionEnd);
+    public Duration getDuration() {
+        return Duration.between(sessionStart, this.getSessionEnd());
     }
 }

@@ -60,11 +60,6 @@ public class TotalPlaytimePlaceholder extends PlaceholderExpansion {
     private String getPlaceholderValue(UUID playerId, @NotNull String params) {
         var totalPlaytime = this.playerDataService.getTotalPlayerPlaytime(playerId);
 
-        var currentPlaytime = this.sessionService.getPlayerCurrentSessionDuration(playerId);
-        if (currentPlaytime != null) {
-            totalPlaytime = totalPlaytime.plus(currentPlaytime);
-        }
-
         return (params.equalsIgnoreCase("formatted"))
                 ? TimeUtils.format(totalPlaytime, this.configurationService.getDurationFormat())
                 : String.valueOf(totalPlaytime.toSeconds());

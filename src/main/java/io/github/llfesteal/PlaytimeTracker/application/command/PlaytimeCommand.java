@@ -55,7 +55,7 @@ public class PlaytimeCommand extends CommandExecutor {
         var currentPlaytime = this.sessionService.getPlayerCurrentSessionDuration(this.playerSession.getPlayerId());
         var formattedCurrentPlaytime = TimeUtils.format(currentPlaytime, this.configurationService.getDurationFormat());
 
-        var totalPlaytime = this.playerDataService.getTotalPlayerPlaytime(this.playerSession.getPlayerId()).plus(currentPlaytime);
+        var totalPlaytime = this.playerDataService.getTotalPlayerPlaytime(this.playerSession.getPlayerId());
         var formattedTotalPlaytime = TimeUtils.format(totalPlaytime, this.configurationService.getDurationFormat());
 
         this.getIssuer().sendMessage(this.langService.getPlaytimeMessages(formattedCurrentPlaytime, formattedTotalPlaytime).toArray(new String[0]));

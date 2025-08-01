@@ -25,7 +25,7 @@ public class SessionStorageImp implements SessionStorage {
     }
 
     @Override
-    public Session getSessionByPlayerId(UUID playerId) {
+    public Session getActiveSessionByPlayerId(UUID playerId) {
         return this.sessionManager.getByPlayerId(playerId);
     }
 
