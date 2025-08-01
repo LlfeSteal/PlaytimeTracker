@@ -2,7 +2,6 @@ package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repo
 
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 

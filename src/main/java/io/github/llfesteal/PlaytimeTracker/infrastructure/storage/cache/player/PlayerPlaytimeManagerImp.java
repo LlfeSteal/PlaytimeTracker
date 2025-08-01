@@ -1,7 +1,6 @@
 package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player;
 
 import io.github.llfesteal.PlaytimeTracker.domain.driving.PlayerPlaytimeStorage;
-import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerData;
 import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerPlaytime;
 
 import java.util.Map;

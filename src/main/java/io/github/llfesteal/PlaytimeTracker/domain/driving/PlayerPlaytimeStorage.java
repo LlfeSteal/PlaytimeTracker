@@ -1,6 +1,5 @@
 package io.github.llfesteal.PlaytimeTracker.domain.driving;
 
-import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerData;
 import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerPlaytime;
 
 import java.util.UUID;
