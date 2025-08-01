@@ -18,6 +18,12 @@ public class ConnectionFactoryImp implements ConnectionFactory {
         this.logger = logger;
     }
 
+    private static String getConnectionString(DatabaseConfig databaseConfig) {
+        return "jdbc:mysql://" + databaseConfig.getDatabaseHost()
+                + ":" + databaseConfig.getDatabasePort()
+                + "/" + databaseConfig.getDatabaseName();
+    }
+
     @Override
     public Connection getConnection() {
         var databaseConfig = configurationService.getDatabaseConfig();
@@ -27,11 +33,5 @@ public class ConnectionFactoryImp implements ConnectionFactory {
             this.logger.log(Level.SEVERE, "Database connection failed", e);
             return null;
         }
-    }
-
-    private static String getConnectionString(DatabaseConfig databaseConfig) {
-        return "jdbc:mysql://" + databaseConfig.getDatabaseHost()
-                + ":" + databaseConfig.getDatabasePort()
-                + "/" + databaseConfig.getDatabaseName();
     }
 }

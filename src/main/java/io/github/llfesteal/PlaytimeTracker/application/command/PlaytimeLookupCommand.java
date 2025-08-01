@@ -60,14 +60,15 @@ public class PlaytimeLookupCommand extends CommandExecutor {
         var endDateArg = this.getArg("end_date");
         this.endDate = endDateArg != null
                 ? LocalDateTime.parse(endDateArg)
-                : LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastPlayed()), ZoneId.systemDefault());;
+                : LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastPlayed()), ZoneId.systemDefault());
+        ;
 
         return true;
     }
 
     @Override
     public boolean execute() {
-        var playerPlaytime = this.playerDataService.getPlayerPlaytime(this.playerUUID,  this.startDate, this.endDate);
+        var playerPlaytime = this.playerDataService.getPlayerPlaytime(this.playerUUID, this.startDate, this.endDate);
         var formattedDuration = TimeUtils.format(playerPlaytime, this.configurationService.getDurationFormat());
 
         this.getIssuer().sendMessage(this.langService.getPlaytimeLookupMessage(this.playerName, formattedDuration, this.startDate.toString(), this.endDate.toString()));

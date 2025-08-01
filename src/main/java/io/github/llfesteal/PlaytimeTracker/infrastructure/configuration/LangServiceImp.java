@@ -14,11 +14,11 @@ public class LangServiceImp extends ConfigServiceBase implements LangService {
 
     @Colorized
     @ConfigParam(paramKey = "error.only-players-allowed")
-    private String errorOnlyPlayersAllowedMessage =  "&cOnly players can do that!";
+    private String errorOnlyPlayersAllowedMessage = "&cOnly players can do that!";
 
     @Colorized
     @ConfigParam(paramKey = "error.session.no-session-alive")
-    private String errorNoSessionAlive =  "&cThere is no session alive ! If you think this is a bug, please contact your administrator.";
+    private String errorNoSessionAlive = "&cThere is no session alive ! If you think this is a bug, please contact your administrator.";
 
     @Colorized
     @ConfigParam(paramKey = "message.playtime")

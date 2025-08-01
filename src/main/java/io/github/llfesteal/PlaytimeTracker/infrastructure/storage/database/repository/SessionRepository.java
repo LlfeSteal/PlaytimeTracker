@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface SessionRepository {
     void init();
+
     void add(Session session);
 
     void updateSessionEndDate(Session session);

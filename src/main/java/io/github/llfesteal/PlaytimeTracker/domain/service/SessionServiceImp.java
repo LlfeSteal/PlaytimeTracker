@@ -36,7 +36,7 @@ public class SessionServiceImp implements SessionService {
 
     @Override
     public void forceSaveSessions() {
-        for (var session :  this.sessionStorage.getAllActiveSessions()) {
+        for (var session : this.sessionStorage.getAllActiveSessions()) {
             session.setSessionEnd(LocalDateTime.now());
             this.sessionStorage.updateSessionEndDate(session);
         }

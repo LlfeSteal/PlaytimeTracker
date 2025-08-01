@@ -34,7 +34,7 @@ public class SessionRepositoryImp implements SessionRepository {
 
     @Override
     public void add(Session session) {
-        try(var connection = this.connectionFactory.getConnection()) {
+        try (var connection = this.connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + this.getTableFullName() + "`(`player_uuid`, `start_date`, `end_date`) VALUES (?,?,?)");
             statement.setString(1, session.getPlayerId().toString());
             statement.setTimestamp(2, Timestamp.valueOf(session.getSessionStart()));
@@ -48,7 +48,7 @@ public class SessionRepositoryImp implements SessionRepository {
 
     @Override
     public void updateSessionEndDate(Session session) {
-        try(var connection = this.connectionFactory.getConnection()) {
+        try (var connection = this.connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE `" + this.getTableFullName() + "` SET `end_date`= ? WHERE player_uuid = ? AND start_date = ?;");
             statement.setTimestamp(1, Timestamp.valueOf(session.getSessionEnd()));
             statement.setString(2, session.getPlayerId().toString());
@@ -64,14 +64,14 @@ public class SessionRepositoryImp implements SessionRepository {
     public List<Session> getPlayerSessions(UUID playerId) {
         List<Session> sessions = new ArrayList<>();
 
-        try(var connection = this.connectionFactory.getConnection()) {
+        try (var connection = this.connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT start_date, end_date FROM `" + this.getTableFullName() + "` WHERE player_uuid = ?;");
             statement.setString(1, playerId.toString());
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 LocalDateTime startDate = resultSet.getTimestamp("start_date").toLocalDateTime();
-                LocalDateTime endDate =  resultSet.getTimestamp("end_date").toLocalDateTime();
+                LocalDateTime endDate = resultSet.getTimestamp("end_date").toLocalDateTime();
                 sessions.add(new Session(playerId, startDate, endDate));
             }
 
@@ -84,7 +84,7 @@ public class SessionRepositoryImp implements SessionRepository {
     }
 
     private void createTableIfNotExist() {
-        try(var connection = this.connectionFactory.getConnection()) {
+        try (var connection = this.connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(getInitRequest());
             statement.execute();
             statement.close();

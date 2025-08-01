@@ -15,10 +15,6 @@ public class Session {
         this.sessionEnd = sessionEnd;
     }
 
-    public void setSessionEnd(LocalDateTime sessionEnd) {
-        this.sessionEnd = sessionEnd;
-    }
-
     public UUID getPlayerId() {
         return playerId;
     }
@@ -29,6 +25,10 @@ public class Session {
 
     public LocalDateTime getSessionEnd() {
         return sessionEnd;
+    }
+
+    public void setSessionEnd(LocalDateTime sessionEnd) {
+        this.sessionEnd = sessionEnd;
     }
 
     public Duration getDuration(boolean isSessionActive) {

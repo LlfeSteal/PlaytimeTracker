@@ -74,7 +74,7 @@ public class PlaytimeTracker extends PluginBase {
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
         initSchedulers();
         initPlaceholders();
-        this.api =  new PlaytimeTrackerAPIImp(this.sessionService, this.playerDataService);
+        this.api = new PlaytimeTrackerAPIImp(this.sessionService, this.playerDataService);
     }
 
     public PlaytimeTrackerAPI getApi() {
@@ -135,7 +135,7 @@ public class PlaytimeTracker extends PluginBase {
 
     @Override
     protected List<ConfigService> registerConfigurationsServices() {
-        return new ArrayList<>(){{
+        return new ArrayList<>() {{
             add(configurationService);
             add(langService);
         }};
