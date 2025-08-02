@@ -1,7 +1,7 @@
 package io.github.llfesteal.PlaytimeTracker.application.command;
 
 import fr.lifesteal.pluginframework.core.command.CommandExecutor;
-import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
+import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerPlaytimeService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangService;
 import io.github.llfesteal.PlaytimeTracker.utils.StringUtils;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class PlaytimeLookupCommand extends CommandExecutor {
 
-    private final PlayerDataService playerDataService;
+    private final PlayerPlaytimeService playerPlaytimeService;
     private final ConfigurationService configurationService;
     private final LangService langService;
 
@@ -29,9 +29,9 @@ public class PlaytimeLookupCommand extends CommandExecutor {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public PlaytimeLookupCommand(CommandSender issuer, Map<String, String> namedArgs, PlayerDataService playerDataService, ConfigurationService configurationService, LangService langService) {
+    public PlaytimeLookupCommand(CommandSender issuer, Map<String, String> namedArgs, PlayerPlaytimeService playerPlaytimeService, ConfigurationService configurationService, LangService langService) {
         super(issuer, namedArgs);
-        this.playerDataService = playerDataService;
+        this.playerPlaytimeService = playerPlaytimeService;
         this.configurationService = configurationService;
         this.langService = langService;
     }
@@ -67,7 +67,7 @@ public class PlaytimeLookupCommand extends CommandExecutor {
 
     @Override
     public boolean execute() {
-        var playerPlaytime = this.playerDataService.getPlayerPlaytime(this.playerUUID, this.startDate, this.endDate);
+        var playerPlaytime = this.playerPlaytimeService.getPlayerPlaytime(this.playerUUID, this.startDate, this.endDate);
         var formattedDuration = TimeUtils.format(playerPlaytime, this.configurationService.getDurationFormat());
 
         this.getIssuer().sendMessage(this.langService.getPlaytimeLookupMessage(this.playerName, formattedDuration, this.startDate.toString(), this.endDate.toString()));

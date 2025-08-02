@@ -1,6 +1,6 @@
 package io.github.llfesteal.PlaytimeTracker.application.placeholder;
 
-import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
+import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerPlaytimeService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
 import io.github.llfesteal.PlaytimeTracker.utils.TimeUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -16,12 +16,12 @@ import java.util.UUID;
 public class TodayPlaytimePlaceholder extends PlaceholderExpansion {
 
     private final Plugin plugin;
-    private final PlayerDataService playerDataService;
+    private final PlayerPlaytimeService playerPlaytimeService;
     private final ConfigurationService configurationService;
 
-    public TodayPlaytimePlaceholder(Plugin plugin, PlayerDataService playerDataService, ConfigurationService configurationService) {
+    public TodayPlaytimePlaceholder(Plugin plugin, PlayerPlaytimeService playerPlaytimeService, ConfigurationService configurationService) {
         this.plugin = plugin;
-        this.playerDataService = playerDataService;
+        this.playerPlaytimeService = playerPlaytimeService;
         this.configurationService = configurationService;
     }
 
@@ -56,7 +56,7 @@ public class TodayPlaytimePlaceholder extends PlaceholderExpansion {
     }
 
     private @NotNull String getPlaceholderValue(UUID playerId, @NotNull String params) {
-        var playerPlaytime = this.playerDataService.getPlayerPlaytime(playerId, LocalDate.now().atStartOfDay(), LocalDate.now().plusDays(1).atStartOfDay());
+        var playerPlaytime = this.playerPlaytimeService.getPlayerPlaytime(playerId, LocalDate.now().atStartOfDay(), LocalDate.now().plusDays(1).atStartOfDay());
 
         return (params.equalsIgnoreCase("formatted"))
                 ? TimeUtils.format(playerPlaytime, this.configurationService.getDurationFormat())

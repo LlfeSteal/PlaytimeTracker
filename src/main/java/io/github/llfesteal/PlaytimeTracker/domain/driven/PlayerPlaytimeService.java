@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public interface PlayerDataService {
+public interface PlayerPlaytimeService {
     void loadPlayerData(UUID playerId);
 
     void unloadPlayerData(UUID playerId);

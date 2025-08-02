@@ -1,6 +1,6 @@
 package io.github.llfesteal.PlaytimeTracker.application.placeholder;
 
-import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
+import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerPlaytimeService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
 import io.github.llfesteal.PlaytimeTracker.utils.TimeUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -15,12 +15,12 @@ import java.util.UUID;
 public class TotalPlaytimePlaceholder extends PlaceholderExpansion {
 
     private final Plugin plugin;
-    private final PlayerDataService playerDataService;
+    private final PlayerPlaytimeService playerPlaytimeService;
     private final ConfigurationService configurationService;
 
-    public TotalPlaytimePlaceholder(Plugin plugin, PlayerDataService playerDataService, ConfigurationService configurationService) {
+    public TotalPlaytimePlaceholder(Plugin plugin, PlayerPlaytimeService playerPlaytimeService, ConfigurationService configurationService) {
         this.plugin = plugin;
-        this.playerDataService = playerDataService;
+        this.playerPlaytimeService = playerPlaytimeService;
         this.configurationService = configurationService;
     }
 
@@ -55,7 +55,7 @@ public class TotalPlaytimePlaceholder extends PlaceholderExpansion {
     }
 
     private String getPlaceholderValue(UUID playerId, @NotNull String params) {
-        var totalPlaytime = this.playerDataService.getTotalPlayerPlaytime(playerId);
+        var totalPlaytime = this.playerPlaytimeService.getTotalPlayerPlaytime(playerId);
 
         return (params.equalsIgnoreCase("formatted"))
                 ? TimeUtils.format(totalPlaytime, this.configurationService.getDurationFormat())

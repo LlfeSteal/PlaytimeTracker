@@ -14,7 +14,7 @@ import io.github.llfesteal.PlaytimeTracker.application.task.BackupSessionsTask;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
 import io.github.llfesteal.PlaytimeTracker.domain.driving.PlayerPlaytimeStorage;
-import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerDataServiceImp;
+import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerPlaytimeServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.SessionServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationServiceImp;
@@ -56,7 +56,7 @@ public class PlaytimeTracker extends PluginBase {
     private PlayerService playerService;
     private LangServiceImp langService;
     private ConfigurationServiceImp configurationService;
-    private PlayerDataServiceImp playerDataService;
+    private PlayerPlaytimeServiceImp playerDataService;
     private PlaytimeTrackerAPI api;
 
     @Override
@@ -72,7 +72,7 @@ public class PlaytimeTracker extends PluginBase {
         this.sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
         var sessionStorage = new SessionStorageImp(this.sessionManager, sessionRepository);
         this.sessionService = new SessionServiceImp(sessionStorage);
-        this.playerDataService = new PlayerDataServiceImp(sessionStorage, playerPlaytimeStorage);
+        this.playerDataService = new PlayerPlaytimeServiceImp(sessionStorage, playerPlaytimeStorage);
         this.playerService = new PlayerServiceImp(this.sessionService, playerDataService);
 
         // API

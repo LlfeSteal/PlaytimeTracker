@@ -1,6 +1,6 @@
 package io.github.llfesteal.PlaytimeTracker.domain.service;
 
-import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
+import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerPlaytimeService;
 import io.github.llfesteal.PlaytimeTracker.domain.driving.PlayerPlaytimeStorage;
 import io.github.llfesteal.PlaytimeTracker.domain.driving.SessionStorage;
 import io.github.llfesteal.PlaytimeTracker.domain.model.PlayerPlaytime;
@@ -9,12 +9,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class PlayerDataServiceImp implements PlayerDataService {
+public class PlayerPlaytimeServiceImp implements PlayerPlaytimeService {
 
     private final SessionStorage sessionStorage;
     private final PlayerPlaytimeStorage playerPlaytimeStorage;
 
-    public PlayerDataServiceImp(SessionStorage sessionStorage, PlayerPlaytimeStorage playerPlaytimeStorage) {
+    public PlayerPlaytimeServiceImp(SessionStorage sessionStorage, PlayerPlaytimeStorage playerPlaytimeStorage) {
         this.sessionStorage = sessionStorage;
         this.playerPlaytimeStorage = playerPlaytimeStorage;
     }

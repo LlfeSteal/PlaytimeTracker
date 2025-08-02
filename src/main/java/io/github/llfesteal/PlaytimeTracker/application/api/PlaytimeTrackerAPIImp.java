@@ -3,7 +3,7 @@ package io.github.llfesteal.PlaytimeTracker.application.api;
 import io.github.llfesteal.PlaytimeTracker.application.api.exception.NoSessionFoundException;
 import io.github.llfesteal.PlaytimeTracker.application.api.exception.SessionAlreadyActiveException;
 import io.github.llfesteal.PlaytimeTracker.application.api.model.Session;
-import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerDataService;
+import io.github.llfesteal.PlaytimeTracker.domain.driven.PlayerPlaytimeService;
 import io.github.llfesteal.PlaytimeTracker.domain.driven.SessionService;
 
 import java.time.Duration;
@@ -13,11 +13,11 @@ import java.util.UUID;
 public final class PlaytimeTrackerAPIImp implements PlaytimeTrackerAPI {
 
     private final SessionService sessionService;
-    private final PlayerDataService playerDataService;
+    private final PlayerPlaytimeService playerPlaytimeService;
 
-    public PlaytimeTrackerAPIImp(SessionService sessionService, PlayerDataService playerDataService) {
+    public PlaytimeTrackerAPIImp(SessionService sessionService, PlayerPlaytimeService playerPlaytimeService) {
         this.sessionService = sessionService;
-        this.playerDataService = playerDataService;
+        this.playerPlaytimeService = playerPlaytimeService;
     }
 
     @Override
@@ -42,7 +42,7 @@ public final class PlaytimeTrackerAPIImp implements PlaytimeTrackerAPI {
 
     @Override
     public Duration getPlayerPlaytime(UUID playerId, LocalDateTime startDate, LocalDateTime endDate) {
-        return this.playerDataService.getPlayerPlaytime(playerId, startDate, endDate);
+        return this.playerPlaytimeService.getPlayerPlaytime(playerId, startDate, endDate);
     }
 
     private Session toApiModel(io.github.llfesteal.PlaytimeTracker.domain.model.Session model) {
