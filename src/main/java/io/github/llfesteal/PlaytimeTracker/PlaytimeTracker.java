@@ -50,8 +50,8 @@ public class PlaytimeTracker extends PluginBase {
 
     private final SessionManager sessionManager = new SessionManagerImp();
     private final PlayerPlaytimeStorage playerPlaytimeStorage = new PlayerPlaytimeManagerImp();
-    private SessionRepository sessionRepository;
     private final Logger logger = getLogger();
+    private SessionRepository sessionRepository;
     private SessionService sessionService;
     private PlayerService playerService;
     private LangServiceImp langService;
