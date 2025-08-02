@@ -71,7 +71,7 @@
         <dependency>
             <groupId>io.github.llfesteal</groupId>
             <artifactId>PluginFramework</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>

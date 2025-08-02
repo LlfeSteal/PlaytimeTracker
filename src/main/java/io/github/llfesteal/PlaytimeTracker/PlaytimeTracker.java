@@ -19,14 +19,16 @@ import io.github.llfesteal.PlaytimeTracker.domain.service.PlayerServiceImp;
 import io.github.llfesteal.PlaytimeTracker.domain.service.SessionServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationServiceImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.LangServiceImp;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.DatabaseConfig;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.model.MySQLConfig;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.BukkitSchedulerWrapper;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.schedule.SchedulerService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.SessionStorageImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.player.PlayerPlaytimeManagerImp;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManager;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.cache.session.SessionManagerImp;
-import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactoryImp;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.DatabaseType;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.MySQLFactory;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.SQLiteFactory;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepository;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repository.SessionRepositoryImp;
 import org.bukkit.Bukkit;
@@ -42,7 +44,7 @@ import java.util.logging.Logger;
 public class PlaytimeTracker extends PluginBase {
 
     static {
-        ConfigurationSerialization.registerClass(DatabaseConfig.class, "DatabaseConfig");
+        ConfigurationSerialization.registerClass(MySQLConfig.class, "MySQLConfig");
     }
 
     private final SchedulerService schedulerService = new BukkitSchedulerWrapper(this);
@@ -60,16 +62,19 @@ public class PlaytimeTracker extends PluginBase {
     private PlaytimeTrackerAPI api;
 
     @Override
-    public void init() {
-        // Configuration
+    public void initConfiguration() {
         var langConfigurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "lang.yml");
         this.langService = new LangServiceImp(this.logger, langConfigurationRepository);
         var configurationRepository = getConfigRepositoryFactory().getNewYamlRepository("", "config.yml");
         this.configurationService = new ConfigurationServiceImp(this.logger, configurationRepository);
+    }
+
+    @Override
+    public void init() {
+        // Database
+        this.initDatabase();
 
         // Services
-        var connectionFactory = new ConnectionFactoryImp(this.logger, this.configurationService);
-        this.sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
         var sessionStorage = new SessionStorageImp(this.sessionManager, sessionRepository);
         this.sessionService = new SessionServiceImp(sessionStorage);
         this.playerDataService = new PlayerPlaytimeServiceImp(sessionStorage, playerPlaytimeStorage);
@@ -88,6 +93,14 @@ public class PlaytimeTracker extends PluginBase {
 
     public PlaytimeTrackerAPI getApi() {
         return this.api;
+    }
+
+    private void initDatabase() {
+        var connectionFactory = this.configurationService.getDatabaseType() == DatabaseType.MYSQL
+                ? new MySQLFactory(this.logger, this.configurationService)
+                : new SQLiteFactory(this.logger, this.configurationService, this.getDataFolder());
+
+        this.sessionRepository = new SessionRepositoryImp(this.logger, connectionFactory, this.configurationService);
     }
 
     private void initSchedulers() {

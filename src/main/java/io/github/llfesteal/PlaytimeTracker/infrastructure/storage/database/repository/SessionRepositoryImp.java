@@ -3,6 +3,7 @@ package io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.repo
 import io.github.llfesteal.PlaytimeTracker.domain.model.Session;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.configuration.ConfigurationService;
 import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.ConnectionFactory;
+import io.github.llfesteal.PlaytimeTracker.infrastructure.storage.database.DatabaseType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -94,15 +95,25 @@ public class SessionRepositoryImp implements SessionRepository {
     }
 
     private String getInitRequest() {
-        return "CREATE TABLE IF NOT EXISTS `" + this.getTableFullName() + "` " +
-                "(`player_uuid` VARCHAR(36) NOT NULL , " +
-                "`start_date` DATETIME NOT NULL , " +
-                "`end_date` DATETIME NOT NULL ," +
-                "PRIMARY KEY (`player_uuid`,`start_date`)) " +
-                "ENGINE = InnoDB;";
+        if (this.configurationService.getDatabaseType() == DatabaseType.MYSQL) {
+
+            return "CREATE TABLE IF NOT EXISTS `" + this.getTableFullName() + "` " +
+                    "(`player_uuid` VARCHAR(36) NOT NULL , " +
+                    "`start_date` DATETIME NOT NULL , " +
+                    "`end_date` DATETIME NOT NULL ," +
+                    "PRIMARY KEY (`player_uuid`,`start_date`)) " +
+                    "ENGINE = InnoDB;";
+        }
+
+        return "CREATE TABLE IF NOT EXISTS " + this.getTableFullName()  + " (" +
+                "player_uuid TEXT NOT NULL, " +
+                "start_date TIMESTAMP  NOT NULL, " +
+                "end_date TIMESTAMP  NOT NULL, " +
+                "PRIMARY KEY (player_uuid, start_date)" +
+                ");";
     }
 
     private String getTableFullName() {
-        return this.configurationService.getDatabaseConfig().getDatabasePrefix() + SESSION_TABLE;
+        return this.configurationService.getDatabasePrefix() + SESSION_TABLE;
     }
 }

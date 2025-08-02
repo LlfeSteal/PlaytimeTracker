@@ -5,26 +5,24 @@ import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.Map;
 
-@SerializableAs("DatabaseConfig")
-public class DatabaseConfig extends ConfigModel {
+@SerializableAs("MySQLConfig")
+public class MySQLConfig extends ConfigModel {
 
     private String databaseHost;
     private int databasePort;
     private String databaseName;
     private String databaseUser;
     private String databasePassword;
-    private String databasePrefix;
 
-    public DatabaseConfig(String databaseHost, int databasePort, String databaseName, String databaseUser, String databasePassword, String databasePrefix) {
+    public MySQLConfig(String databaseHost, int databasePort, String databaseName, String databaseUser, String databasePassword) {
         this.databaseHost = databaseHost;
         this.databasePort = databasePort;
         this.databaseName = databaseName;
         this.databaseUser = databaseUser;
         this.databasePassword = databasePassword;
-        this.databasePrefix = databasePrefix;
     }
 
-    public DatabaseConfig(Map<String, Object> args) {
+    public MySQLConfig(Map<String, Object> args) {
         super(args);
     }
 
@@ -48,12 +46,8 @@ public class DatabaseConfig extends ConfigModel {
         return databasePassword;
     }
 
-    public String getDatabasePrefix() {
-        return databasePrefix;
-    }
-
     @Override
     public ConfigModel clone() {
-        return new DatabaseConfig(this.databaseHost, this.databasePort, this.databaseName, this.databaseUser, this.databasePassword, this.databasePrefix);
+        return new MySQLConfig(this.databaseHost, this.databasePort, this.databaseName, this.databaseUser, this.databasePassword);
     }
 }
