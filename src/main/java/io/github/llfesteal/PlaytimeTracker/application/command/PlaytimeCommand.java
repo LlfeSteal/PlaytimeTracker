@@ -45,6 +45,7 @@ public class PlaytimeCommand extends CommandExecutor {
         if (this.playerSession == null) {
             this.getIssuer().sendMessage(this.langService.getErrorNoSessionAlive());
             logger.severe("The player " + player.getUniqueId() + " has no session active !");
+            return false;
         }
 
         return true;
