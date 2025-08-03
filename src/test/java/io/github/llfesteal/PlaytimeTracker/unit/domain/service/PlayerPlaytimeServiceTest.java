@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -191,5 +192,33 @@ public final class PlayerPlaytimeServiceTest {
             verify(sessionStorage, times(1)).getActiveSessionByPlayerId(playerId);
             verifyNoMoreInteractions(sessionStorage);
         }
+    }
+
+    @Test
+    public void getTotalPlayerPlaytimeWithNoPlaytimeStoredAndNoCurrentSessionShouldReturnZero() {
+        // Arrange
+        var playerId = UUID.randomUUID();
+
+        var sessionStorage = Mockito.mock(SessionStorage.class);
+        when(sessionStorage.getActiveSessionByPlayerId(playerId)).thenReturn(null);
+        when(sessionStorage.getAllPlayerSessions(playerId)).thenReturn(Collections.emptyList());
+
+        var playerPlaytimeStorage = Mockito.mock(PlayerPlaytimeStorage.class);
+        when(playerPlaytimeStorage.getPlaytime(playerId)).thenReturn(null);
+
+        var service = new PlayerPlaytimeServiceImp(sessionStorage, playerPlaytimeStorage);
+
+        // Act
+        var result = service.getTotalPlayerPlaytime(playerId);
+
+        // Assert
+        assertThat(result).isEqualTo(Duration.ZERO);
+
+        verify(playerPlaytimeStorage, times(1)).getPlaytime(playerId);
+        verifyNoMoreInteractions(playerPlaytimeStorage);
+
+        verify(sessionStorage, times(1)).getActiveSessionByPlayerId(playerId);
+        verify(sessionStorage, times(1)).getAllPlayerSessions(playerId);
+        verifyNoMoreInteractions(sessionStorage);
     }
 }
