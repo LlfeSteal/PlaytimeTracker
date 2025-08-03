@@ -254,7 +254,7 @@ public final class PlayerPlaytimeServiceTest {
         assertThat(result).isEqualTo(Duration.ofHours(3L));
 
         verify(playerPlaytimeStorage, times(1)).getPlaytime(playerId);
-        verifyNoMoreInteractions();
+        verifyNoMoreInteractions(playerPlaytimeStorage);
 
         verify(sessionStorage, times(1)).getActiveSessionByPlayerId(playerId);
         verifyNoMoreInteractions(sessionStorage);
