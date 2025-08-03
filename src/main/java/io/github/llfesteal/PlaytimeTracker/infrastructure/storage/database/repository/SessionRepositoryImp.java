@@ -105,7 +105,7 @@ public class SessionRepositoryImp implements SessionRepository {
                     "ENGINE = InnoDB;";
         }
 
-        return "CREATE TABLE IF NOT EXISTS " + this.getTableFullName()  + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + this.getTableFullName() + " (" +
                 "player_uuid TEXT NOT NULL, " +
                 "start_date TIMESTAMP  NOT NULL, " +
                 "end_date TIMESTAMP  NOT NULL, " +

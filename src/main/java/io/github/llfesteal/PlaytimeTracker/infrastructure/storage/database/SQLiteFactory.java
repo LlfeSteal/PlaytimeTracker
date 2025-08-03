@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-public class SQLiteFactory implements ConnectionFactory{
+public class SQLiteFactory implements ConnectionFactory {
 
     public final ConfigurationService configurationService;
     public final Logger logger;

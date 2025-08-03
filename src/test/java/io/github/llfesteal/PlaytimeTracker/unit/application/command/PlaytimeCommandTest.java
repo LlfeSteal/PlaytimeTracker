@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -113,7 +112,7 @@ public final class PlaytimeCommandTest {
 
         var args = new HashMap<String, String>();
 
-        var session = new Session(playerId, LocalDateTime.now().minusHours(1),  LocalDateTime.now());
+        var session = new Session(playerId, LocalDateTime.now().minusHours(1), LocalDateTime.now());
         var sessionService = Mockito.mock(SessionService.class);
         when(sessionService.getSessionByPlayerId(playerId)).thenReturn(session);
 
@@ -152,7 +151,7 @@ public final class PlaytimeCommandTest {
 
         var args = new HashMap<String, String>();
 
-        var session = new Session(playerId, LocalDateTime.now().minusHours(1),  LocalDateTime.now());
+        var session = new Session(playerId, LocalDateTime.now().minusHours(1), LocalDateTime.now());
         var sessionService = Mockito.mock(SessionService.class);
         when(sessionService.getSessionByPlayerId(playerId)).thenReturn(session);
         when(sessionService.getPlayerCurrentSessionDuration(playerId)).thenReturn(Duration.ofSeconds(93784));
@@ -180,7 +179,7 @@ public final class PlaytimeCommandTest {
         assertThat(result).isTrue();
 
         verify(issuer, times(1)).getUniqueId();
-        verify(issuer, times(1)).sendMessage(new String[] { "info message" });
+        verify(issuer, times(1)).sendMessage(new String[]{"info message"});
         verifyNoMoreInteractions(issuer);
 
         verify(sessionService, times(1)).getSessionByPlayerId(playerId);
