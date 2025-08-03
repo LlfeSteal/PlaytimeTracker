@@ -2,7 +2,7 @@
 A simple tool to track your playtime in games.
 
 ## Features
-- Track playtime for multiple games
+- Track playtime by game session
 - View total player playtime
 - Filter playtime by date period
 
@@ -45,7 +45,7 @@ message:
 
 ## Commands
 - ``/playtime`` - Displays the total playtime for all games.
-- ``/playtime lookup [playerUUID/playerName] <start_date> <end_date>`` - Filters playtime by date range, if not date is provided, it will show the total playtime for the player.
+- ``/playtime lookup [playerUUID/playerName] <start_date> <end_date>`` - Filters playtime by date range, if no date is provided, it will show the total playtime for the player.
 
 ## Placeholders
 Placeholders can be used to display playtime information in other plugins or systems using [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI). 
@@ -55,6 +55,11 @@ The following placeholders are available:
 - `%TodayPlaytime%` - Displays the player platime for the current day.
 - `%CurrentPlaytime%` - Displays the current session playtime.
 
+Each placeholder value can be formatted with the configured pattern by adding the param `_formatted`.
+- `%TotalPlaytime_fomatted%` - Displays the formatted total player playtime.
+- `%TodayPlaytime_formatted%` - Displays the formatted player playtime for the current day.
+- `%CurrentPlaytime%_formatted` - Displays the formatted current session playtime.
+- 
 ## Permissions
 - playtime.playtime - Allows players to use the `/playtime` command.
 - playtime.lookup - Allows players to use the `/playtime lookup` command.
