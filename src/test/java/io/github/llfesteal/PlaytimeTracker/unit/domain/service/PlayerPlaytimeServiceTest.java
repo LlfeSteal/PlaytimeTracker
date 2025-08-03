@@ -222,4 +222,41 @@ public final class PlayerPlaytimeServiceTest {
         verify(sessionStorage, times(1)).getAllPlayerSessions(playerId);
         verifyNoMoreInteractions(sessionStorage);
     }
+
+    @Test
+    public void getPlayerPlaytimeWithNoCurrentSessionShouldReturnPlayerPlaytime() {
+        // Arrange
+        var playerId = UUID.randomUUID();
+        var startDate = LocalDateTime.parse("2025-08-02T00:00:00");
+        var endDate = LocalDateTime.parse("2025-08-03T00:00:00");
+
+        var sessions = new ArrayList<Session>() {{
+            add(new Session(playerId, LocalDateTime.parse("2025-07-30T15:00:00"), LocalDateTime.parse("2025-07-30T15:30:00"))); // 30 minutes out of the scope
+            add(new Session(playerId, LocalDateTime.parse("2025-08-01T23:30:00"), LocalDateTime.parse("2025-08-02T00:30:00"))); // 1 hour but only 30 minutes in scope
+            add(new Session(playerId, LocalDateTime.parse("2025-08-02T06:00:00"), LocalDateTime.parse("2025-08-02T08:00:00"))); // 2 hours
+            add(new Session(playerId, LocalDateTime.parse("2025-08-02T15:00:00"), LocalDateTime.parse("2025-08-02T15:30:00"))); // 30 minutes
+        }};
+
+        var playerPlaytime = new PlayerPlaytime(playerId, sessions);
+
+        var sessionStorage = mock(SessionStorage.class);
+        when(sessionStorage.getActiveSessionByPlayerId(playerId)).thenReturn(null);
+
+        var playerPlaytimeStorage = mock(PlayerPlaytimeStorage.class);
+        when(playerPlaytimeStorage.getPlaytime(playerId)).thenReturn(playerPlaytime);
+
+        var service = new PlayerPlaytimeServiceImp(sessionStorage, playerPlaytimeStorage);
+
+        // Act
+        var result = service.getPlayerPlaytime(playerId, startDate, endDate);
+
+        // Assert
+        assertThat(result).isEqualTo(Duration.ofHours(3L));
+
+        verify(playerPlaytimeStorage, times(1)).getPlaytime(playerId);
+        verifyNoMoreInteractions();
+
+        verify(sessionStorage, times(1)).getActiveSessionByPlayerId(playerId);
+        verifyNoMoreInteractions(sessionStorage);
+    }
 }
